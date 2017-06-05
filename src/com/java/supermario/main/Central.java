@@ -38,29 +38,28 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 			menu.paint(g);
 		}
 	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {	
+
+	public void keyPressed(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void actionPerformed(ActionEvent e) {
 		repaint();
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		
 		
 	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	
+	
 
 
 }
