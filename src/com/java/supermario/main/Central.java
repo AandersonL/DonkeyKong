@@ -15,17 +15,21 @@ import com.java.supermario.constants.Constants;
 import com.java.supermario.environment.DefaultBackground;
 import com.java.supermario.environment.MenuScreen;
 import com.java.supermario.environment.Player;
+import com.java.supermario.environment.Stage0;
+import com.java.supermario.utils.Collisions;
 
 public class Central extends JFrame implements Constants, ActionListener, KeyListener {
 	private boolean isStart;
 	Timer timer;
 	private MenuScreen menu;
-	Player player1;
+	public static Player player1;
 	DefaultBackground background;
+	public static Stage0 stageZero;
+	private Collisions collisions;
 	private Image img;
 	private Graphics gfx;
 	public Central(){
-		this.setTitle("Super Mario");
+		this.setTitle("Donkey Kong Arcade");
 		this.setSize(1000,700);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
@@ -36,7 +40,9 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 		gfx = img.getGraphics();
 		player1 = new Player();
 		background = new DefaultBackground();
+		stageZero = new Stage0();
 		menu = new MenuScreen();
+		collisions = new Collisions();
 		isStart = false;
 		timer = new Timer(90, this);
 		timer.start();
@@ -45,20 +51,27 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 	@Override
 	public void paint(Graphics g) {
 		super.paint(gfx);
+		
 		if(isStart){
 			menu.paint(gfx);
-		}else{	
+		}else{			
 			background.paint(gfx);
+			stageZero.paint(gfx);
 			player1.paint(gfx);		
 		}
+		
 		g.drawImage(img, 0, 0, this);
+		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {	
-		repaint();
+		
 		player1.setSprites();
 		player1.move();
+		collisions.checkCollision();
+		repaint();
+//		stageZero.setBounds();
 		
 	}
 
@@ -75,6 +88,9 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 
 		if(e.getKeyCode() == e.VK_SPACE)
 			player1.setJump(true);
+		
+		if(e.getKeyCode() == e.VK_UP)
+			player1.setUp(true);
 	}
 
 	@Override
@@ -87,10 +103,8 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 
 		if(e.getKeyCode() == e.VK_RIGHT)
 			player1.setRight(false);
-
-		//		if(e.getKeyCode() == e.VK_SPACE)
-		//			player1.setJump(false);
-
+		if(e.getKeyCode() == e.VK_UP)
+			player1.setUp(false);
 	}
 
 	@Override
