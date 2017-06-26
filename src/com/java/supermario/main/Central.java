@@ -66,13 +66,10 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 
 	@Override
 	public void actionPerformed(ActionEvent e) {	
-		
 		player1.setSprites();
 		player1.move();
 		collisions.checkCollision();
-		repaint();
-//		stageZero.setBounds();
-		
+		repaint();	
 	}
 
 	@Override

@@ -19,10 +19,10 @@ public class Player extends JFrame implements Constants{
 	private boolean left, down, right, jump, up;
 	private boolean isEscada,isLeft, isRigth,sob;
 	private int heigth, width;
-	private int x, y;
-	private int contJump, contSubida;;
+	private int x, y, distanciaEscada, tempY;
+	private int contJump, contSubida;
 	private int contWal;
-	
+	private Rectangle player, escada;
 	public Player(){
 		init();
 	}
@@ -36,9 +36,13 @@ public class Player extends JFrame implements Constants{
 		isLeft = false;
 		isRigth = true;
 		sob = false;
+		player = new Rectangle();
+		escada = new Rectangle();
+		distanciaEscada = 0;
 		x = 25;
 		y = 630;
 		contSubida = 0;
+		tempY = y;
 		width = 45;
 		heigth = 45;
 		contJump = 0;
@@ -53,19 +57,22 @@ public class Player extends JFrame implements Constants{
 		url = getClass().getResource(path);
 		try {
 			sprite = ImageIO.read(url);
-			g.drawImage(sprite,x,y,width,heigth, this);
-			g.setColor(Color.WHITE);
-			g.drawString("Contador subida - " + contSubida, 200, 200);
-//			g.drawRect(x, y, width, 50);
-			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} catch(java.lang.IllegalArgumentException e){
 
+		}
+//		g.setColor(Color.white);
+//		g.drawString("Diferença - " + (player.y - escada.y), 200, 200);
+		g.drawImage(sprite,x,y,width,heigth, this);
 	}
 
 	public void setSprites(){
+		System.out.println("player X - " + player.x + " Escada X - " + escada.x);
+		if(!player.intersects(escada)){
+			isEscada = false;
+		}
 		if(isLeft && !left){
 			path="sprites/MarioStopLeft.png";
 		}
@@ -74,7 +81,7 @@ public class Player extends JFrame implements Constants{
 			path="sprites/MarioStopRigth.png";
 
 		}
-		if(isEscada && sob){
+		if(isEscada && sob && distanciaEscada < 48 && distanciaEscada > -53){
 			path = "sprites/marioEscada1.png";
 		}
 		if(right && !sob){
@@ -95,65 +102,82 @@ public class Player extends JFrame implements Constants{
 			isLeft = true;
 			isRigth = false;
 		}
-		
-		if(up && isEscada && sob){
-			path = "sprites/marioEscada" + contWal + ".png";
+
+		if(up && isEscada){
+			if(contWal != 0)
+				path = "sprites/marioEscada" + contWal + ".png";
 			contWal++;
-			
-			if(contWal > 2 && contSubida < 8)
+			System.out.println("Fantasia " + contWal);
+			contSubida++;
+			if(contWal > 2 && contSubida < 16)
 				contWal = 1;
-			
-			else if(contWal == 5){
-				isEscada = false;
-				contWal = 1;
+			else if((player.y - escada.y) <= -40){
 				contSubida = 0;
+				contWal = 0;
+				isRigth = true;
+				isEscada = false;
 				sob = false;
 			}
-			contSubida++;
-				
+
 		}	
-				
+
+		if(down && isEscada){
+			path = "sprites/marioEscada" + contWal + ".png";
+			contWal++;
+			System.out.println("Fantasia " + contWal);
+			if(contWal > 2)
+				contWal = 1;
+			else if((player.y - escada.y) >= 50){
+				contWal = 1;
+				isRigth = true;
+				isEscada = false;
+				sob = false;
+				contSubida = 0;
+			}
+		}
 
 	}
 
 	public void move(){	
-		if(left && contSubida == 0)
-			x -= 10;
+		if(left && !sob){
+			x -= 10;	
+			player.x -= 10;
+		}
 
-		if(right && contSubida == 0)
+		if(right && !sob){
 			x += 10;
-		
+			player.x += 10;
+		}
+
 		if(up && isEscada){
 			y -= 5;
 			sob = true;
-			
 		}
-			
-		
-		if(down && isEscada)
-			y += 7;
-		
+
+		if(down && isEscada){
+			y += 5;
+		}
+
+
 		if(x > 945)
 			x = 945;
-		
+
 		if (x < 5)
 			x = 5;
-		
-		if(jump){
-			
+
+		if(jump){	
 			if(right || isRigth)
 				path = "sprites/marioJumpRigth.png";
 			else if(left || isLeft)
 				path = "sprites/marioJump.png";
-			
+
 			if(contJump > 40){
 				this.y += (int) 20 * .5;
 				this.contJump += (int) 20 * .5;
 				if(contJump > 100){
-
 					this.contJump = 0;
 					this.jump = false;
-					this.y = 630;
+					this.y = this.tempY;
 					width = 45;
 					heigth = 45;
 				}
@@ -177,7 +201,7 @@ public class Player extends JFrame implements Constants{
 	public void setRight(boolean right){
 		this.right = right;
 	}
-	
+
 	public void setUp(boolean up){
 		this.up = up;
 	}
@@ -185,23 +209,26 @@ public class Player extends JFrame implements Constants{
 	public void setJump(boolean jump){
 		this.jump = jump;
 	}
-	
+
 	public void setPosition(int y){
 		this.y = y;
+		this.tempY = y;
 	}
-	
-	public void setEscada(boolean isEscada){
+
+	public void setEscada(boolean isEscada, Rectangle player, Rectangle escada){
 		this.isEscada = isEscada;
+		this.player = player;
+		this.escada = escada;
 	}
-	
+
 	public boolean getEscada(){
 		return this.isEscada;
 	}
-	
+
 	public boolean getJump(){
 		return this.jump;
 	}
-	
+
 	@Override
 	public Rectangle bounds() {
 		// TODO Auto-generated method stub
