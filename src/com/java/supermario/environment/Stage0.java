@@ -37,10 +37,12 @@ public class Stage0 extends JFrame implements Constants {
 			escadaNormal = ImageIO.read(escadaPath);
 			for (int i = 0; i < COORDENADAS_ESCADA_NORMAL.length; i++) {
 				g.drawImage(escadaNormal,COORDENADAS_ESCADA_NORMAL[i][0],COORDENADAS_ESCADA_NORMAL[i][1],35,78,this);
-				g.setColor(Color.red);
-//				g.drawRect(COORDENADAS_ESCADA_NORMAL[i][0], COORDENADAS_ESCADA_NORMAL[i][1] - 20, 35, 100);
+				//g.setColor(Color.red);
+				//g.drawRect(COORDENADAS_ESCADA_NORMAL[i][0], COORDENADAS_ESCADA_NORMAL[i][1] - 20, 35, 100);
 			}
 			for (int i = 0; i < COORDENADAS.length; i++) {
+			//	g.setColor(Color.white);
+				//g.drawRect(COORDENADAS[i][0], COORDENADAS[i][1],52,25);
 				g.drawImage(blocoUnico, COORDENADAS[i][0], COORDENADAS[i][1],52,25, this);
 				xBounds += COORDENADAS[i][0];
 				yBounds += COORDENADAS[i][1];
