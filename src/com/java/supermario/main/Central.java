@@ -54,7 +54,7 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 		isStart = false;
 		network = new Network();
 		timer = new Timer(90, this);
-		
+
 		scan = new Scanner(System.in);
 		System.out.println("Quer ser servidor?");
 		String esc = scan.nextLine();
@@ -62,19 +62,19 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 			network.escuta();
 			isServidor = true;
 		}
-			
+
 		else{
 			network.conecta("localhost", 4444);
 			isServidor = false;
 		}
-			
+
 		timer.start();
 	}
 
 	@Override
 	public void paint(Graphics g) {
 		super.paint(gfx);
-		gfx.drawString("Dados " + network.retornaDados(), 200, 300);
+		//		gfx.drawString("Dados " + network.retornaDados(), 200, 300);
 		if(isStart){
 			menu.paint(gfx);
 		}else{			
@@ -82,28 +82,27 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 			stageZero.paint(gfx);
 			kong.paint(gfx);
 			player1.paint(gfx);	
-			
+
 		}
-		
+
 		g.drawImage(img, 0, 0, this);
-		
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {	
 		player1.setSprites();
 		player1.move();
-		
+
 		if(!kong.getAction())
 			kong.setSprite();
 		else
 			kong.lancaBarril();
-		
+
 		collisions.checkCollision();
 		repaint();
 		onlineData();
 		onlineControl();
-		
 	}
 
 	@Override
@@ -120,14 +119,14 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 
 		if(e.getKeyCode() == e.VK_SPACE)
 			player1.setJump(true);
-		
+
 		if(e.getKeyCode() == e.VK_UP)
 			player1.setUp(true);
 		//Donkey Kong
-		
+
 		if(e.getKeyCode() == e.VK_F)
 			kong.lancaBarril();
-		
+
 	}
 
 	@Override
@@ -140,7 +139,7 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 
 		if(e.getKeyCode() == e.VK_RIGHT)
 			player1.setRight(false);
-		
+
 		if(e.getKeyCode() == e.VK_UP)
 			player1.setUp(false);
 	}
@@ -150,17 +149,34 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	public void onlineData(){
 		JSONObject jsonData = new JSONObject();
+		//Player
 		jsonData.put("x", player1.getX());
 		jsonData.put("y", player1.getY());
 		jsonData.put("jump", player1.getJump());
+		jsonData.put("rightPlayer", player1.getRigth());
+		jsonData.put("leftPlayer", player1.getLeft());
+		jsonData.put("jump", player1.getJump());
 		network.setData(jsonData);
-		network.enviaDados();
+
 	}
-	
+
 	public void onlineControl(){
+		try{
+			JSONObject finalData = new JSONObject(network.retornaDados());
+			int xPlayer = finalData.getInt("x");
+			boolean rigthPlayer = finalData.getBoolean("rightPlayer");
+			boolean leftPlayer = finalData.getBoolean("leftPlayer");
+			boolean jump = finalData.getBoolean("jump");
+			if(isServidor){
+				player1.setAllDataOnline(xPlayer, rigthPlayer, leftPlayer,jump);
+			}
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 		
 	}
 

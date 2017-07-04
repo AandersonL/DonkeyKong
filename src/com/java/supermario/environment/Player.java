@@ -238,6 +238,13 @@ public class Player extends JFrame implements Constants{
 		this.player = player;
 		this.escada = escada;
 	}
+	
+	public void setAllDataOnline(int x, boolean rigth, boolean left,boolean jump){
+		this.x = x;
+		this.right = rigth;
+		this.left = left;
+		this.jump = jump;
+	}
 
 	public boolean getEscada(){
 		return this.isEscada;
@@ -255,6 +262,12 @@ public class Player extends JFrame implements Constants{
 		return this.y;
 	}
 	
+	public boolean getRigth(){
+		return this.right;
+	}
+	public boolean getLeft(){
+		return this.left;
+	}
 	public boolean getLife(){
 		return this.lose;
 	}

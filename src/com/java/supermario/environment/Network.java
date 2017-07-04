@@ -23,9 +23,10 @@ public class Network implements Runnable{
 	private int contador;
 	private String data;
 	private JSONObject dataFinal;
+	private String response;
 	public Network(){
 		end = false;
-		conecta = new Socket();
+		response = "nada";
 		num = 0;
 		th = new Thread[2];
 		conectado = false;
@@ -34,6 +35,7 @@ public class Network implements Runnable{
 	}
 	//Servidor
 	public void escuta(){
+		conecta = new Socket();
 		while(!conectado){
 			try{
 				s = new ServerSocket(4444);
@@ -41,7 +43,6 @@ public class Network implements Runnable{
 				conecta = s.accept();
 				th[0] = new Thread(this);
 				th[0].start();
-				contador++;
 				th[1] = new Thread(this);
 				th[1].start();
 				conectado = true;
@@ -55,24 +56,20 @@ public class Network implements Runnable{
 	//Metodos hibridos, tanto para o cliente quanto para o servidor
 
 	public void recebeDados(){
-		System.out.println("recebendo");
 		try {
 			recebe = new Scanner(conecta.getInputStream());		
-			System.out.println(recebe.nextLine());
-			//dataFinal = new JSONObject(recebe.nextLine());
-		} catch (IOException e) {// TODO Auto-generated catch block
+			response = recebe.nextLine();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void enviaDados(){
-		System.out.println("enviando");
 		PrintStream print;
 		try {
 			print = new PrintStream(conecta.getOutputStream());
 			print.println(this.data);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -83,18 +80,23 @@ public class Network implements Runnable{
 	}
 	
 	public String retornaDados(){
-		return this.recebe.nextLine();
+		return this.response;
 	}
 
 	
 	@Override
 	public void run() {
 		int acao = contador;
+		contador++;
 		while(!end){
-			if(acao == 1)
+			if(acao == 1){
 				recebeDados();
-			else
+			}
+				
+			else{
 				enviaDados();
+			}
+				
 		}	
 	}
 
@@ -107,11 +109,11 @@ public class Network implements Runnable{
 		while(!conectado){
 			try{		
 				conecta = new Socket(host,port);
-				conectado = true;
 				th[0] = new Thread(this);
 				th[0].start();
 				th[1] = new Thread(this);
 				th[1].start();
+				conectado = true;
 				System.out.println("Conectado..");
 			}catch (Exception e) {
 
