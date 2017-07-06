@@ -1,6 +1,7 @@
 package com.java.supermario.environment;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -11,18 +12,23 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import com.java.supermario.constants.Constants;
+import com.java.supermario.main.Central;
 
 public class Player extends JFrame implements Constants{
 	private URL url;
 	private Image sprite;
 	private String path; //Caminho da imagem
+	private URL pathScore;
+	private Image imgScore;
 	private boolean left, down, right, jump, up;
-	private boolean isEscada,isLeft, isRigth,sob, lose;
+	private boolean isEscada,isLeft, isRigth,sob, lose, end, scoreImg;
 	private int heigth, width;
 	private int x, y, distanciaEscada, tempY;
 	private int contJump, contSubida;
 	private int contWal, contSprite;
+	private int score, contScore;
 	private Rectangle player, escada;
+
 	public Player(){
 		init();
 	}
@@ -37,9 +43,13 @@ public class Player extends JFrame implements Constants{
 		isRigth = true;
 		lose = false;
 		sob = false;
+		end = false;
 		player = new Rectangle();
 		escada = new Rectangle();
 		distanciaEscada = 0;
+		score = 0;
+		contScore = 0;
+		scoreImg = false;
 		x = 25;
 		y = 630;
 		contSubida = 0;
@@ -57,8 +67,10 @@ public class Player extends JFrame implements Constants{
 		super.paint(g);
 		g.setColor(Color.black);
 		url = getClass().getResource(path);
+		pathScore = getClass().getResource("sprites/100pts.png");
 		try {
 			sprite = ImageIO.read(url);
+			imgScore = ImageIO.read(pathScore);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -67,7 +79,27 @@ public class Player extends JFrame implements Constants{
 		}
 		//		g.setColor(Color.white);
 		//		g.drawString("Diferença - " + (player.y - escada.y), 200, 200);
+		if(Central.state == Central.State.START){
+			Font fonte = new Font("arial", Font.BOLD, 25);
+			g.setColor(Color.WHITE);
+			g.drawString("Score - " + score, 800, 50);
+			
+		}
 		g.drawImage(sprite,x,y,width,heigth, this);
+		if(scoreImg){
+			contScore++;
+			if(contScore > 5){
+				scoreImg = false;
+				contScore = 0;
+			}
+			
+			if(contScore == 1)
+				score += 100;
+			g.drawImage(imgScore, x - 30, y + 5,30,25, this);
+			
+
+
+		}
 		g.setColor(Color.white);
 		//	g.drawRect(x,y,width,heigth);
 	}
@@ -143,8 +175,8 @@ public class Player extends JFrame implements Constants{
 			if(contSprite % 4 == 0){
 				path = "sprites/marioDeath" + contWal + ".png";
 				contWal++;
-				if(contWal > 4){
-					//fim
+				if(contWal > 5){
+					end = true;
 				}
 			}
 		}
@@ -203,6 +235,9 @@ public class Player extends JFrame implements Constants{
 		}
 	}
 
+	public void score(){
+		scoreImg = true;
+	}
 
 	public void setDown(boolean down){
 		this.down = down;
@@ -238,7 +273,7 @@ public class Player extends JFrame implements Constants{
 		this.player = player;
 		this.escada = escada;
 	}
-	
+
 	public void setAllDataOnline(int x, boolean rigth, boolean left,boolean jump){
 		this.x = x;
 		this.right = rigth;
@@ -253,15 +288,15 @@ public class Player extends JFrame implements Constants{
 	public boolean getJump(){
 		return this.jump;
 	}
-	
+
 	public int getX(){
 		return this.x;
 	}
-	
+
 	public int getY(){
 		return this.y;
 	}
-	
+
 	public boolean getRigth(){
 		return this.right;
 	}
@@ -269,7 +304,7 @@ public class Player extends JFrame implements Constants{
 		return this.left;
 	}
 	public boolean getLife(){
-		return this.lose;
+		return this.end;
 	}
 
 	@Override

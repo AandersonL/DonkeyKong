@@ -28,23 +28,28 @@ public class Boss extends JFrame implements Constants, Runnable {
 	private int heigth, width;
 	private int pts;
 	private int div;
-	private boolean action;
+	private boolean action, inGame;
 	private Graphics gf;
 	public static ArrayList<Barril> listaBarril;
+	private Thread th1 = new Thread(this);
 	public Boss(){
+		init();
+	}
+	
+	public void init(){
 		contSprite = 1;
 		contPricess = 1;
 		setSprite();
 		numTroca = 0;
 		contBarril = 1;
 		action = false;
+		inGame = true;
 		pts = 0;
 		div = 5;
 		heigth = 99;
-		width = 130;
-		Thread th1 = new Thread(this);
+		width = 130;		
 		th1.start();
-		listaBarril = new ArrayList<Barril>();
+		listaBarril = new ArrayList<Barril>();	
 	}
 
 	@Override
@@ -117,7 +122,7 @@ public class Boss extends JFrame implements Constants, Runnable {
 
 	@Override
 	public void run() {
-		while(true){
+		while(inGame){
 			num++;
 			if(num % 4 == 0){
 				princessPath = "sprites/princess" + contPricess + ".png";
@@ -132,7 +137,11 @@ public class Boss extends JFrame implements Constants, Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-		
+		}	
+	}
+	
+	public void reset(){
+		inGame = true;
+		listaBarril.clear();
 	}
 }

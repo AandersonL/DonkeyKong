@@ -27,8 +27,10 @@ public class Barril extends JFrame implements Constants{
 		num = 0;
 		x = 300;
 		y = 100;
+		
 		fall = false;
 		contFall = 0;
+		
 	}
 
 
@@ -40,7 +42,7 @@ public class Barril extends JFrame implements Constants{
 			barril = ImageIO.read(barrilPath);
 			g.drawImage(barril, x, y,30,30, this);
 		//	g.setColor(Color.WHITE);
-		//	g.drawRect(x + 2, y + 2, 25, 25);
+			//g.drawRect(x + 5, y - 45,1, 40);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -52,7 +54,6 @@ public class Barril extends JFrame implements Constants{
 	}
 
 	public void moveBarril() {
-
 		num++;
 		//System.out.println("Contador queda " + contFall);
 		if(num % 2 == 0){
@@ -68,7 +69,6 @@ public class Barril extends JFrame implements Constants{
 				if(contBarril < 1)
 					contBarril = 4;
 			}
-
 		}
 	}
 
@@ -106,5 +106,9 @@ public class Barril extends JFrame implements Constants{
 	public Rectangle bounds() {
 		// TODO Auto-generated method stub
 		return (new Rectangle(x,y, 30, 30));
+	}
+	
+	public Rectangle scoreBounds(){
+		return (new Rectangle(x + 5, y - 16,1, 15));
 	}
 }

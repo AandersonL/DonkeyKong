@@ -25,6 +25,7 @@ public class Collisions implements Constants {
 		Rectangle ground;
 		Rectangle escada;
 		Rectangle barril;
+		Rectangle score;
 		int cont;
 		int contBarril[];
 		cont = 0;
@@ -71,7 +72,6 @@ public class Collisions implements Constants {
 
 
 		/* ABAIXO, COLISÕES COM OS BARRIS! */
-
 		for (int i = 0; i < Boss.listaBarril.size(); i++) {
 			barril = Boss.listaBarril.get(i).bounds();
 			barril.x += 2;
@@ -80,6 +80,15 @@ public class Collisions implements Constants {
 			barril.height -= 5;
 			if(player.intersects(barril) && !Central.player1.getJump()){
 				Central.player1.setLose(true);
+			}
+		}
+		
+		/* Pontuação */
+		for(int i = 0; i < Boss.listaBarril.size();i++){
+			score = Boss.listaBarril.get(i).scoreBounds();
+			if(player.intersects(score) && Central.player1.getJump()){
+				Central.player1.score();
+				break;
 			}
 		}
 
