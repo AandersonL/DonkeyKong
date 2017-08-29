@@ -1,1 +1,1 @@
-Simple remake of Super Mario writed in Java
+Simple remake of Donkey Kong writed in Java
