@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import com.java.supermario.constants.Constants;
+import com.java.supermario.main.Central;
 
 public class Boss extends JFrame implements Constants, Runnable {
 	private String path;
@@ -29,6 +30,7 @@ public class Boss extends JFrame implements Constants, Runnable {
 	private int pts;
 	private int div;
 	private boolean action, inGame;
+	private boolean ia;
 	private Graphics gf;
 	public static ArrayList<Barril> listaBarril;
 	private Thread th1 = new Thread(this);
@@ -130,11 +132,14 @@ public class Boss extends JFrame implements Constants, Runnable {
 				contPricess++;
 				if(contPricess > 2)
 					contPricess = 1;
+				int teste = (int) (Math.random() * 20) + 1;
+				if(teste < 5 && Central.isSingle && Central.state == Central.State.START)
+					lancaBarril();
+
 			}
 			try {
 				Thread.sleep(90);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}	

@@ -88,7 +88,24 @@ public class LocalManager extends JFrame implements Constants {
 		}else if(p2Kong){
 			g.drawString("Player 2", kongBox.x + 30, kongBox.y - 20);
 		}
-
+	}
+	
+	public String getP1(){
+		if(p1Mario)
+			return "mario";
+		else if(p1Kong)
+			return "kong";
+		
+		return "none";
+	}
+	
+	public String getP2(){
+		if(p2Mario)
+			return "mario";
+		else if(p2Kong)
+			return "kong";
+		
+		return "none";
 	}
 
 }

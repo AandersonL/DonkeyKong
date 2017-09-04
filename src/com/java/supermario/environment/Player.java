@@ -101,7 +101,7 @@ public class Player extends JFrame implements Constants{
 
 		}
 		g.setColor(Color.white);
-		//	g.drawRect(x,y,width,heigth);
+		g.drawRect(x,y,width,heigth);
 	}
 
 	public void setSprites(){

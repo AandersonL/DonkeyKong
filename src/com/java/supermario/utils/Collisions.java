@@ -21,6 +21,7 @@ public class Collisions implements Constants {
 
 	public void checkCollision(){
 		Rectangle player = Central.player1.bounds();
+		Rectangle martelo = Central.background.marteloBounds();
 		posicaoAtual = player.y;
 		Rectangle ground;
 		Rectangle escada;
@@ -90,6 +91,12 @@ public class Collisions implements Constants {
 				Central.player1.score();
 				break;
 			}
+		}
+		
+		/* Colisão com o martelo(final do game :v)*/
+		if(player.intersects(martelo)){
+			System.out.println("Ae krl!");
+			Central.background.isEnd = true;
 		}
 
 	}

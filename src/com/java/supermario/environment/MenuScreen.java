@@ -21,8 +21,10 @@ public class MenuScreen extends JFrame implements Constants, MouseListener{
 	
 	private Rectangle marioBox = Central.localManager.marioBox;
 	private Rectangle kongBox = Central.localManager.kongBox;
+	private Rectangle init = Central.localManager.initBox;
+	private Rectangle reset = Central.localManager.reset;
 	Rectangle player = new Rectangle(WIDTH_TELA/2 - 120, 250, 180, 50);
-	Rectangle onlineMode = new Rectangle(WIDTH_TELA/2 - 120, 350, 180, 50);
+//	Rectangle onlineMode = new Rectangle(WIDTH_TELA/2 - 120, 350, 180, 50);
 	Rectangle multiPlayer = new Rectangle(WIDTH_TELA/2 - 120, 450, 180, 50);
 
 
@@ -47,8 +49,8 @@ public class MenuScreen extends JFrame implements Constants, MouseListener{
 		g.setFont(fonte2);
 		g.drawString("Single Play", player.x + 10, player.y + 30);
 		g2d.draw(player);
-		g.drawString("Modo Online", player.x + 2, player.y + 130);
-		g2d.draw(onlineMode);
+//		g.drawString("P1vsP2", player.x + 2, player.y + 130);
+//		g2d.draw(onlineMode);
 		g.drawString("P1vsP2", player.x + 40, player.y + 230);
 		g2d.draw(multiPlayer);
 
@@ -101,16 +103,16 @@ public class MenuScreen extends JFrame implements Constants, MouseListener{
 				Central.state = Central.State.START;
 			}
 
-			if(onlineMode.contains(e.getX(), e.getY())){
-				Central.state = Central.State.ONLINE;
-			}
+//			if(onlineMode.contains(e.getX(), e.getY())){
+//				Central.state = Central.State.ONLINE;
+//			}
 
 			if(multiPlayer.contains(e.getX(), e.getY())){
 				Central.state = Central.state.MULTIPLAYER;
 			}	
 		}
 		
-		if(Central.state == Central.State.MULTIPLAYER && vez <= 2){
+		if(Central.state == Central.State.MULTIPLAYER ){
 	
 			if(!done && marioBox.contains(x, y) && vez == 1){
 				Central.localManager.p1Mario = true;
@@ -139,6 +141,13 @@ public class MenuScreen extends JFrame implements Constants, MouseListener{
 				Central.localManager.ready = true;
 				done = true;
 			}
+			
+			if(!done && init.contains(x,y) && vez >= 2){
+				Central.state = Central.State.START;
+				Central.isSingle = false;
+			}
+			System.out.println("Acabou? " + done);
+			System.out.println("Vez - " + vez);
 		}
 	}
 

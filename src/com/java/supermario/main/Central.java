@@ -28,11 +28,12 @@ import com.java.supermario.utils.Collisions;
 public class Central extends JFrame implements Constants, ActionListener, KeyListener{
 	private static boolean isStart;
 	private boolean isMario;
-	private boolean isServidor;
+//	private boolean isServidor;
+	public static boolean isSingle;
 	private MenuScreen settings;
 	public static Player player1;
 	public static Boss kong;
-	DefaultBackground background;
+	public static DefaultBackground background;
 	public static OnlineManager manager;
 	public static LocalManager localManager;
 	public static Stage0 stageZero;
@@ -40,8 +41,8 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 	private Collisions collisions;
 	private Image img;
 	private Graphics gfx;
-	private Network network;
-	private JSONObject dataFinal;
+//	private Network network;
+//	private JSONObject dataFinal;
 	public static enum State{
 		MENU,
 		START,
@@ -64,12 +65,13 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 		gfx = img.getGraphics();
 		isMario = false;
 		isStart = false;
+		isSingle = true;
 		player1 = new Player();
 		kong = new Boss();
 		background = new DefaultBackground();
 		stageZero = new Stage0();
 		collisions = new Collisions();
-		network = new Network();
+//		network = new Network();
 		manager = new OnlineManager();
 		localManager = new LocalManager();
 		settings = new MenuScreen();
@@ -92,20 +94,12 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 			if(state == State.MENU){
 				settings.paint(gfx);
 			}
-			
-			if(state == State.ONLINE){
-				manager.paint(gfx);
-				this.addMouseListener(manager);
-			}
-				
 			if(state == State.MULTIPLAYER){
 				localManager.paint(gfx);
-				
 			}
 				
 			g.drawImage(img, 0, 0, this);
 		}catch (Exception e) {
-			// TODO: handle exception
 		}
 	}
 
@@ -123,8 +117,8 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 			player1.move();
 			collisions.checkCollision();
 			endGame();
-			onlineData();
-			onlineControl();
+//			onlineData();
+//			onlineControl();
 			
 		}
 			
@@ -152,7 +146,7 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 				player1.setUp(true);
 			//Donkey Kong
 
-			if(e.getKeyCode() == e.VK_F)
+			if(e.getKeyCode() == e.VK_F && !isSingle)
 				kong.lancaBarril();
 		}
 
@@ -181,37 +175,39 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 
 	}
 
-	public void onlineData(){
-		JSONObject jsonData = new JSONObject();
-		//Player
-		jsonData.put("x", player1.getX());
-		jsonData.put("y", player1.getY());
-		jsonData.put("jump", player1.getJump());
-		jsonData.put("rightPlayer", player1.getRigth());
-		jsonData.put("leftPlayer", player1.getLeft());
-		jsonData.put("jump", player1.getJump());
-		network.setData(jsonData);
+//	public void onlineData(){
+//		JSONObject jsonData = new JSONObject();
+//		//Player
+//		jsonData.put("x", player1.getX());
+//		jsonData.put("y", player1.getY());
+//		jsonData.put("jump", player1.getJump());
+//		jsonData.put("rightPlayer", player1.getRigth());
+//		jsonData.put("leftPlayer", player1.getLeft());
+//		jsonData.put("jump", player1.getJump());
+//		network.setData(jsonData);
+//
+//	}
 
-	}
-
-	public void onlineControl(){
-		try{
-			JSONObject finalData = new JSONObject(network.retornaDados());
-			int xPlayer = finalData.getInt("x");
-			boolean rigthPlayer = finalData.getBoolean("rightPlayer");
-			boolean leftPlayer = finalData.getBoolean("leftPlayer");
-			boolean jump = finalData.getBoolean("jump");
-			if(isServidor){
-				player1.setAllDataOnline(xPlayer, rigthPlayer, leftPlayer,jump);
-			}
-		}catch (Exception e) {
-			// TODO: handle exception
-		}
-	}
+//	public void onlineControl(){
+//		try{
+//			JSONObject finalData = new JSONObject(network.retornaDados());
+//			int xPlayer = finalData.getInt("x");
+//			boolean rigthPlayer = finalData.getBoolean("rightPlayer");
+//			boolean leftPlayer = finalData.getBoolean("leftPlayer");
+//			boolean jump = finalData.getBoolean("jump");
+//			if(isServidor){
+//				player1.setAllDataOnline(xPlayer, rigthPlayer, leftPlayer,jump);
+//			}
+//		}catch (Exception e) {
+//			// TODO: handle exception
+//		}
+//	}
 	
 	public void endGame(){
 		if(player1.getLife()){
-			state = State.SCORE;	
+			state = State.MENU;	
+			player1.init();
+			kong.reset();
 		}
 	}
 
