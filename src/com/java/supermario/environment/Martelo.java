@@ -21,6 +21,10 @@ public class Martelo extends JFrame implements Constants {
 	private int x,y;
 
 	public Martelo() {
+		init();
+	}
+	
+	public void init(){
 		marteloPath = "sprites/martelo1.png";
 		isEnd = false;
 		finalScene = false;
@@ -30,7 +34,6 @@ public class Martelo extends JFrame implements Constants {
 		x = 400;
 		y = 30;
 	}
-
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);

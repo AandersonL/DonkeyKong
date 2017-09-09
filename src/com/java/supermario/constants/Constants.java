@@ -8,7 +8,7 @@ public interface Constants {
 	
 	int WIDTH_TELA = 1000;
 	int HEIGTH_TELA = 700;
-	double GRAVITY = .98;
+	double GRAVITY = 9.98;
 	//Solo
 	int[] SOLO_X = { 0 ,60,120,180,220,280,340,400,460,520,580,640,700,760,820,880,920,980};
 	int[] SOLO_Y = { 640,640,640,640,640,640,640,640,640,640,640,640,640,640,640,640,640,640 };

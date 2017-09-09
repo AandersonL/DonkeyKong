@@ -43,8 +43,6 @@ public class MenuScreen extends JFrame implements Constants, MouseListener{
 		g.setFont(fonte);
 		g.setColor(Color.WHITE);
 		g.drawString("DONKEY KONG CLASSIC", WIDTH_TELA/2 - 350, HEIGTH_TELA/2 - 200);
-
-
 		Font fonte2 = new Font("arial",Font.BOLD, 25);
 		g.setFont(fonte2);
 		g.drawString("Single Play", player.x + 10, player.y + 30);
@@ -101,6 +99,12 @@ public class MenuScreen extends JFrame implements Constants, MouseListener{
 		if(Central.state == Central.State.MENU){
 			if(player.contains(e.getX(), e.getY())){
 				Central.state = Central.State.START;
+//				if(Central.kong.savedPrinces()){
+					Central.player1.init();
+					Central.kong.reset();
+					Central.martelo.init();
+					Central.isSingle = true;
+//				}
 			}
 
 //			if(onlineMode.contains(e.getX(), e.getY())){

@@ -1,5 +1,6 @@
 package com.java.supermario.main;
 
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -29,7 +30,7 @@ import com.java.supermario.utils.Collisions;
 public class Central extends JFrame implements Constants, ActionListener, KeyListener{
 	private static boolean isStart;
 	private boolean isMario;
-//	private boolean isServidor;
+	//	private boolean isServidor;
 	public static boolean isSingle;
 	private MenuScreen settings;
 	public static Player player1;
@@ -43,8 +44,8 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 	private Collisions collisions;
 	private Image img;
 	private Graphics gfx;
-//	private Network network;
-//	private JSONObject dataFinal;
+	//	private Network network;
+	//	private JSONObject dataFinal;
 	public static enum State{
 		MENU,
 		START,
@@ -74,8 +75,8 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 		stageZero = new Stage0();
 		collisions = new Collisions();
 		martelo = new Martelo();
-//		network = new Network();
-//		manager = new OnlineManager();
+		//		network = new Network();
+		//		manager = new OnlineManager();
 		localManager = new LocalManager();
 		settings = new MenuScreen();
 		this.addMouseListener(settings);
@@ -86,29 +87,35 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 
 	@Override
 	public void paint(Graphics g) {
-	
-			super.paint(gfx);
-			//		gfx.drawString("Dados " + network.retornaDados(), 200, 300);	
-			background.paint(gfx);
-			stageZero.paint(gfx);
-			kong.paint(gfx);
-			martelo.paint(gfx);
-			player1.paint(gfx);	
-			if(state == State.MENU){
-				settings.paint(gfx);
-			}
-			if(state == State.MULTIPLAYER){
-				localManager.paint(gfx);
-			}
-				
-			g.drawImage(img, 0, 0, this);
+
+		super.paint(gfx);
+		//		gfx.drawString("Dados " + network.retornaDados(), 200, 300);
+		gfx.setFont(new Font("arial",Font.BOLD, 15));
+		background.paint(gfx);
+		stageZero.paint(gfx);
+		kong.paint(gfx);
+		martelo.paint(gfx);
+		if(!isSingle)
+			gfx.drawString("F para jogar barril", 500, 40);
+		
+		gfx.drawString("Setas para movimentação, espaço para pular", 600, 500);
+		player1.paint(gfx);	
+		
+		if(state == State.MENU){
+			settings.paint(gfx);
+		}
+		if(state == State.MULTIPLAYER){
+			localManager.paint(gfx);
+		}
+
+		g.drawImage(img, 0, 0, this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		repaint();
 		player1.setSprites();
-		
+
 		if(!kong.getAction())
 			if(kong.isDead())
 				kong.setLoseAnimation();
@@ -116,24 +123,24 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 				kong.setSprite();
 		else
 			kong.lancaBarril();
-		
+
 		if(state == State.START){
 			player1.move();
 			collisions.checkCollision();
 			endGame();
-//			onlineData();
-//			onlineControl();
-			
+			//			onlineData();
+			//			onlineControl();
+
 		}
-			
-		
+
+
 
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		//Mario
-		if(state == State.START){
+		if(state == State.START || !kong.savedPrinces()){
 			if(e.getKeyCode() == e.VK_DOWN)
 				player1.setDown(true);
 
@@ -151,16 +158,16 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 
 			if(e.getKeyCode() == e.VK_F && !isSingle && !kong.isDead())
 				kong.lancaBarril();
-			
-			if(e.getKeyCode() == e.VK_Q)
-				martelo.isEnd = true;
+//
+//			if(e.getKeyCode() == e.VK_Q)
+//				martelo.isEnd = true;
 		}
 
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if(state == State.START){
+		if(state == State.START || !kong.savedPrinces()){
 			if(e.getKeyCode() == e.VK_DOWN)
 				player1.setDown(false);
 
@@ -181,41 +188,45 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 
 	}
 
-//	public void onlineData(){
-//		JSONObject jsonData = new JSONObject();
-//		//Player
-//		jsonData.put("x", player1.getX());
-//		jsonData.put("y", player1.getY());
-//		jsonData.put("jump", player1.getJump());
-//		jsonData.put("rightPlayer", player1.getRigth());
-//		jsonData.put("leftPlayer", player1.getLeft());
-//		jsonData.put("jump", player1.getJump());
-//		network.setData(jsonData);
-//
-//	}
+	//	public void onlineData(){
+	//		JSONObject jsonData = new JSONObject();
+	//		//Player
+	//		jsonData.put("x", player1.getX());
+	//		jsonData.put("y", player1.getY());
+	//		jsonData.put("jump", player1.getJump());
+	//		jsonData.put("rightPlayer", player1.getRigth());
+	//		jsonData.put("leftPlayer", player1.getLeft());
+	//		jsonData.put("jump", player1.getJump());
+	//		network.setData(jsonData);
+	//
+	//	}
 
-//	public void onlineControl(){
-//		try{
-//			JSONObject finalData = new JSONObject(network.retornaDados());
-//			int xPlayer = finalData.getInt("x");
-//			boolean rigthPlayer = finalData.getBoolean("rightPlayer");
-//			boolean leftPlayer = finalData.getBoolean("leftPlayer");
-//			boolean jump = finalData.getBoolean("jump");
-//			if(isServidor){
-//				player1.setAllDataOnline(xPlayer, rigthPlayer, leftPlayer,jump);
-//			}
-//		}catch (Exception e) {
-//			// TODO: handle exception
-//		}
-//	}
-	
+	//	public void onlineControl(){
+	//		try{
+	//			JSONObject finalData = new JSONObject(network.retornaDados());
+	//			int xPlayer = finalData.getInt("x");
+	//			boolean rigthPlayer = finalData.getBoolean("rightPlayer");
+	//			boolean leftPlayer = finalData.getBoolean("leftPlayer");
+	//			boolean jump = finalData.getBoolean("jump");
+	//			if(isServidor){
+	//				player1.setAllDataOnline(xPlayer, rigthPlayer, leftPlayer,jump);
+	//			}
+	//		}catch (Exception e) {
+	//			// TODO: handle exception
+	//		}
+	//	}
+
 	public void endGame(){
 		if(player1.getLife()){
-			state = State.MENU;	
-			player1.init();
-			kong.reset();
-			this.isSingle = true;
+			state = State.MENU;
+			Central.kong.listaBarril.clear();
+//			state = State.MENU;	
+//			player1.init();
+//			kong.reset();
+//			martelo.init();
+//			this.isSingle = true;
 		}
+
 	}
 
 }

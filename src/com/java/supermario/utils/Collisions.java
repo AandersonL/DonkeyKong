@@ -83,6 +83,8 @@ public class Collisions implements Constants {
 			barril.height -= 5;
 			if(player.intersects(barril) && !Central.player1.getJump() && !Central.player1.getEscada()){
 				Central.player1.setLose(true);
+				
+				
 			}
 		}
 		
@@ -109,7 +111,10 @@ public class Collisions implements Constants {
 		}
 		
 		if(player.intersects(princess)){
-			System.out.println("VENCEU PORRA!");
+			Central.kong.savePrincess();
+			Central.state = Central.State.MENU;
+			Central.player1.setLeft(false);
+			Central.player1.setRight(false);
 		}
 			
 

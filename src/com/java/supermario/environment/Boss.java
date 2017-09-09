@@ -25,6 +25,8 @@ public class Boss extends JFrame implements Constants, Runnable {
 	private Image prince;
 	private URL help;
 	private Image helpImg;
+	private URL heart;
+	private Image heartImg;
 	private int contSprite, contBarril, contPricess;
 	private int numTroca, num;
 	private int heigth, width;
@@ -33,6 +35,7 @@ public class Boss extends JFrame implements Constants, Runnable {
 	private boolean action, inGame;
 	private boolean isEnd;
 	private boolean ia;
+	private boolean savePrincess;
 	private Graphics gf;
 	public static ArrayList<Barril> listaBarril;
 	private Thread th1 = new Thread(this);
@@ -49,6 +52,7 @@ public class Boss extends JFrame implements Constants, Runnable {
 		action = false;
 		inGame = true;
 		isEnd = false;
+		savePrincess = false;
 		pts = 0;
 		div = 5;
 		heigth = 99;
@@ -65,11 +69,13 @@ public class Boss extends JFrame implements Constants, Runnable {
 		barrilUpPath = getClass().getResource("sprites/barrilUp.png");
 		princess = getClass().getResource(princessPath);
 		help = getClass().getResource(helpPath);
+		heart = getClass().getResource("sprites/heart.png");
 		try {
 			sprite = ImageIO.read(imagePath);
 			barrilUp = ImageIO.read(barrilUpPath);
 			prince = ImageIO.read(princess);
 			helpImg = ImageIO.read(help);
+			heartImg = ImageIO.read(heart);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch(java.lang.IllegalArgumentException e){
@@ -85,8 +91,12 @@ public class Boss extends JFrame implements Constants, Runnable {
 		}
 		g.drawImage(sprite, 200, 29,width,heigth, this);
 		g.drawImage(prince, 10, 80,40,50, this);
-		g.drawImage(helpImg, 65, 70,30,20, this);
-		//		g.drawRect(200, 29, width, heigth);
+	
+		if(savePrincess)
+			g.drawImage(heartImg, 25, 20,50,30,this);
+		else
+			g.drawImage(helpImg, 65, 70,30,20, this);
+			//		g.drawRect(200, 29, width, heigth);
 	}
 
 	public void setSprite(){
@@ -128,7 +138,6 @@ public class Boss extends JFrame implements Constants, Runnable {
 					contBarril = 1;
 					action = false;
 				}
-	
 			}
 		}else {
 			setLoseAnimation();
@@ -139,7 +148,7 @@ public class Boss extends JFrame implements Constants, Runnable {
 	public boolean getAction(){
 		return this.action;
 	}
-
+	
 	@Override
 	public void run() {
 		while(inGame){
@@ -170,10 +179,21 @@ public class Boss extends JFrame implements Constants, Runnable {
 	public boolean isDead(){
 		return this.isEnd;
 	}
-
+	
+	public void savePrincess(){
+		this.savePrincess = true;
+		listaBarril.clear();
+	}
+	
+	public boolean savedPrinces(){
+		return this.savePrincess;
+	}
 	public void reset(){
 		inGame = true;
 		listaBarril.clear();
+		setEnd(false);
+		savePrincess = false;
+		isEnd = false;
 	}
 
 	public Rectangle bounds(){
