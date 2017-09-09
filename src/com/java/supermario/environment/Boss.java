@@ -2,6 +2,7 @@ package com.java.supermario.environment;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class Boss extends JFrame implements Constants, Runnable {
 	private int pts;
 	private int div;
 	private boolean action, inGame;
+	private boolean isEnd;
 	private boolean ia;
 	private Graphics gf;
 	public static ArrayList<Barril> listaBarril;
@@ -37,7 +39,7 @@ public class Boss extends JFrame implements Constants, Runnable {
 	public Boss(){
 		init();
 	}
-	
+
 	public void init(){
 		contSprite = 1;
 		contPricess = 1;
@@ -46,6 +48,7 @@ public class Boss extends JFrame implements Constants, Runnable {
 		contBarril = 1;
 		action = false;
 		inGame = true;
+		isEnd = false;
 		pts = 0;
 		div = 5;
 		heigth = 99;
@@ -78,12 +81,12 @@ public class Boss extends JFrame implements Constants, Runnable {
 		for (int i = 0; i < listaBarril.size(); i++) {
 			listaBarril.get(i).paint(g);
 			listaBarril.get(i).moveBarril();
-			
+
 		}
-		
 		g.drawImage(sprite, 200, 29,width,heigth, this);
 		g.drawImage(prince, 10, 80,40,50, this);
 		g.drawImage(helpImg, 65, 70,30,20, this);
+		//		g.drawRect(200, 29, width, heigth);
 	}
 
 	public void setSprite(){
@@ -97,23 +100,38 @@ public class Boss extends JFrame implements Constants, Runnable {
 		}
 	}
 
-	public void lancaBarril(){
-		action = true;
+	public void setLoseAnimation(){
 		numTroca++;
-		if(numTroca % div == 0){
-			if(contBarril > 3 && contBarril < 6){
-				width = 145;
-			}
-			path = "sprites/kongBarril" +contBarril + ".png";
-			contBarril++;
-			if(contBarril == 4){
-				listaBarril.add(new Barril());
-			}
-			if(contBarril > 6){
-				contBarril = 1;
-				action = false;
-			}
+		if(numTroca % 4 == 0){
+			heigth = 100;
+			path = "sprites/konglose" + contSprite + ".png";
+			contSprite++;
+			if(contSprite > 3)
+				contSprite = 1;
+		}
+	}
 
+	public void lancaBarril(){
+		if(!isDead()){
+			action = true;
+			numTroca++;
+			if(numTroca % div == 0){
+				if(contBarril > 3 && contBarril < 6){
+					width = 145;
+				}
+				path = "sprites/kongBarril" +contBarril + ".png";
+				contBarril++;
+				if(contBarril == 4){
+					listaBarril.add(new Barril());
+				}
+				if(contBarril > 6){
+					contBarril = 1;
+					action = false;
+				}
+	
+			}
+		}else {
+			setLoseAnimation();
 		}
 
 	}
@@ -132,8 +150,8 @@ public class Boss extends JFrame implements Constants, Runnable {
 				contPricess++;
 				if(contPricess > 2)
 					contPricess = 1;
-				int teste = (int) (Math.random() * 20) + 1;
-				if(teste < 5 && Central.isSingle && Central.state == Central.State.START)
+				int action = (int) (Math.random() * 20) + 1;
+				if(!isDead() && action < 8 && Central.isSingle && Central.state == Central.State.START)
 					lancaBarril();
 
 			}
@@ -144,9 +162,25 @@ public class Boss extends JFrame implements Constants, Runnable {
 			}
 		}	
 	}
-	
+
+	public void setEnd(boolean isEnd){
+		this.isEnd = isEnd;
+	}
+
+	public boolean isDead(){
+		return this.isEnd;
+	}
+
 	public void reset(){
 		inGame = true;
 		listaBarril.clear();
+	}
+
+	public Rectangle bounds(){
+		return (new Rectangle(140, 29,130,99));
+	}
+	
+	public Rectangle princess(){
+		return (new Rectangle(10, 80,40,50));
 	}
 }

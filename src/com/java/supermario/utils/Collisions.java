@@ -21,7 +21,9 @@ public class Collisions implements Constants {
 
 	public void checkCollision(){
 		Rectangle player = Central.player1.bounds();
-		Rectangle martelo = Central.background.marteloBounds();
+		Rectangle martelo = Central.martelo.marteloBounds();
+		Rectangle kong = Central.kong.bounds();
+		Rectangle princess = Central.kong.princess();
 		posicaoAtual = player.y;
 		Rectangle ground;
 		Rectangle escada;
@@ -79,7 +81,7 @@ public class Collisions implements Constants {
 			barril.y += 2;
 			barril.width -= 5;
 			barril.height -= 5;
-			if(player.intersects(barril) && !Central.player1.getJump()){
+			if(player.intersects(barril) && !Central.player1.getJump() && !Central.player1.getEscada()){
 				Central.player1.setLose(true);
 			}
 		}
@@ -94,10 +96,22 @@ public class Collisions implements Constants {
 		}
 		
 		/* Colisão com o martelo(final do game :v)*/
-		if(player.intersects(martelo)){
-			System.out.println("Ae krl!");
-			Central.background.isEnd = true;
+		if(player.intersects(martelo))
+			Central.martelo.isEnd = true;
+		
+		if(martelo.intersects(kong)){
+			Central.martelo.finalScene = true;
+			Central.kong.setEnd(true);
 		}
+		
+		if(player.intersects(kong) && !Central.martelo.finalScene){
+			Central.player1.setLose(true);
+		}
+		
+		if(player.intersects(princess)){
+			System.out.println("VENCEU PORRA!");
+		}
+			
 
 	}
 

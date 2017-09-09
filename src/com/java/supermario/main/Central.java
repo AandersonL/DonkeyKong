@@ -16,6 +16,7 @@ import com.java.supermario.constants.Constants;
 import com.java.supermario.environment.Boss;
 import com.java.supermario.environment.DefaultBackground;
 import com.java.supermario.environment.LocalManager;
+import com.java.supermario.environment.Martelo;
 import com.java.supermario.environment.MenuScreen;
 import com.java.supermario.environment.Network;
 import com.java.supermario.environment.OnlineManager;
@@ -33,6 +34,7 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 	private MenuScreen settings;
 	public static Player player1;
 	public static Boss kong;
+	public static Martelo martelo;
 	public static DefaultBackground background;
 	public static OnlineManager manager;
 	public static LocalManager localManager;
@@ -71,8 +73,9 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 		background = new DefaultBackground();
 		stageZero = new Stage0();
 		collisions = new Collisions();
+		martelo = new Martelo();
 //		network = new Network();
-		manager = new OnlineManager();
+//		manager = new OnlineManager();
 		localManager = new LocalManager();
 		settings = new MenuScreen();
 		this.addMouseListener(settings);
@@ -83,13 +86,13 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 
 	@Override
 	public void paint(Graphics g) {
-		try{
+	
 			super.paint(gfx);
-			//		gfx.drawString("Dados " + network.retornaDados(), 200, 300);
-
+			//		gfx.drawString("Dados " + network.retornaDados(), 200, 300);	
 			background.paint(gfx);
 			stageZero.paint(gfx);
 			kong.paint(gfx);
+			martelo.paint(gfx);
 			player1.paint(gfx);	
 			if(state == State.MENU){
 				settings.paint(gfx);
@@ -99,8 +102,6 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 			}
 				
 			g.drawImage(img, 0, 0, this);
-		}catch (Exception e) {
-		}
 	}
 
 	@Override
@@ -109,7 +110,10 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 		player1.setSprites();
 		
 		if(!kong.getAction())
-			kong.setSprite();
+			if(kong.isDead())
+				kong.setLoseAnimation();
+			else 
+				kong.setSprite();
 		else
 			kong.lancaBarril();
 		
@@ -144,10 +148,12 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 
 			if(e.getKeyCode() == e.VK_UP)
 				player1.setUp(true);
-			//Donkey Kong
 
-			if(e.getKeyCode() == e.VK_F && !isSingle)
+			if(e.getKeyCode() == e.VK_F && !isSingle && !kong.isDead())
 				kong.lancaBarril();
+			
+			if(e.getKeyCode() == e.VK_Q)
+				martelo.isEnd = true;
 		}
 
 	}
@@ -208,6 +214,7 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 			state = State.MENU;	
 			player1.init();
 			kong.reset();
+			this.isSingle = true;
 		}
 	}
 
