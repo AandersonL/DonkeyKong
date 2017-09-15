@@ -39,6 +39,7 @@ public class Boss extends JFrame implements Constants, Runnable {
 	private Graphics gf;
 	public static ArrayList<Barril> listaBarril;
 	private Thread th1 = new Thread(this);
+	private int CHANGE = 15;
 	public Boss(){
 		init();
 	}
@@ -101,7 +102,7 @@ public class Boss extends JFrame implements Constants, Runnable {
 
 	public void setSprite(){
 		numTroca++;
-		if(numTroca % 4 == 0){
+		if(numTroca % CHANGE == 0){
 			width = 130;
 			path = "sprites/kong" + contSprite + ".png";
 			contSprite++;
@@ -112,7 +113,7 @@ public class Boss extends JFrame implements Constants, Runnable {
 
 	public void setLoseAnimation(){
 		numTroca++;
-		if(numTroca % 4 == 0){
+		if(numTroca % CHANGE == 0){
 			heigth = 100;
 			path = "sprites/konglose" + contSprite + ".png";
 			contSprite++;
@@ -125,7 +126,7 @@ public class Boss extends JFrame implements Constants, Runnable {
 		if(!isDead()){
 			action = true;
 			numTroca++;
-			if(numTroca % div == 0){
+			if(numTroca % CHANGE == 0){
 				if(contBarril > 3 && contBarril < 6){
 					width = 145;
 				}
@@ -153,7 +154,7 @@ public class Boss extends JFrame implements Constants, Runnable {
 	public void run() {
 		while(inGame){
 			num++;
-			if(num % 4 == 0){
+			if(num % div == 0 && !savedPrinces()){
 				princessPath = "sprites/princess" + contPricess + ".png";
 				helpPath = "sprites/help" + contPricess + ".png";
 				contPricess++;

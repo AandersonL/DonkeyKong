@@ -28,7 +28,9 @@ public class Player extends JFrame implements Constants{
 	private int contWal, contSprite;
 	private int score, contScore;
 	private Rectangle player, escada;
-
+	private int CHANGE = 3;
+	private int CHANGE_ESCADA = 3;
+	private int changeNum;
 	public Player(){
 		init();
 	}
@@ -58,6 +60,7 @@ public class Player extends JFrame implements Constants{
 		heigth = 45;
 		contJump = 0;
 		contWal = 1;
+		changeNum = 0;
 		contSprite = 0;
 		setSprites();	
 	}
@@ -66,6 +69,7 @@ public class Player extends JFrame implements Constants{
 	public void paint(Graphics g) {
 		super.paint(g);
 		g.setColor(Color.black);
+		g.setFont(new Font("arial",Font.BOLD, 30));
 		url = getClass().getResource(path);
 		pathScore = getClass().getResource("sprites/100pts.png");
 		try {
@@ -105,6 +109,9 @@ public class Player extends JFrame implements Constants{
 	}
 
 	public void setSprites(){
+		changeNum++;
+		if(changeNum > 2000)
+			changeNum = 0;
 		if(!lose){
 			if(!player.intersects(escada)){
 				isEscada = false;
@@ -120,7 +127,7 @@ public class Player extends JFrame implements Constants{
 			if(isEscada && sob && distanciaEscada < 48 && distanciaEscada > -53){
 				path = "sprites/marioEscada1.png";
 			}
-			if(right && !sob){
+			if(right && !sob && changeNum % CHANGE == 0){
 				path="sprites/MarioWalkRigth" + contWal + ".png";
 				contWal++;
 				if(contWal > 2)
@@ -129,7 +136,7 @@ public class Player extends JFrame implements Constants{
 				isRigth = true;
 			}
 
-			if(left && !sob){
+			if(left && !sob && changeNum % CHANGE == 0){
 				path="sprites/MarioWalkLeft" + contWal + ".png";
 				contWal++;
 				if(contWal > 2)
@@ -139,13 +146,15 @@ public class Player extends JFrame implements Constants{
 				isRigth = false;
 			}
 
-			if(up && isEscada){
-
+			if(up && isEscada ){
+				
 				if(contWal != 0)
 					path = "sprites/marioEscada" + contWal + ".png";
-				contWal++;
-				contSubida++;
-
+				if(changeNum % CHANGE_ESCADA == 0){
+					contWal++;
+					contSubida++;
+				}
+				
 				if(contWal > 2 && contSubida < 16)
 					contWal = 1;
 				else if((player.y - escada.y) <= -40){
@@ -157,7 +166,7 @@ public class Player extends JFrame implements Constants{
 				}
 			}	
 
-			if(down && isEscada){
+			if(down && isEscada && changeNum % CHANGE_ESCADA == 0){
 				path = "sprites/marioEscada" + contWal + ".png";
 				contWal++;
 				if(contWal > 2)
@@ -172,7 +181,7 @@ public class Player extends JFrame implements Constants{
 			}
 		}else{
 			contSprite++;
-			if(contSprite % 4 == 0){
+			if(contSprite % CHANGE == 0 ){
 				path = "sprites/marioDeath" + contWal + ".png";
 				contWal++;
 				if(contWal > 5){
@@ -185,22 +194,22 @@ public class Player extends JFrame implements Constants{
 	public void move(){	
 		if(!lose){
 			if(left && !sob){
-				x -= 10;	
+				x -= 5;	
 				player.x -= 10;
 			}
 
 			if(right && !sob){
-				x += 10;
+				x += 5;
 				player.x += 10;
 			}
 
 			if(up && isEscada){
-				y -= 5;
+				y -= 2;
 				sob = true;
 			}
 
 			if(down && isEscada){
-				y += 5;
+				y += 2;
 				sob = true;
 			}
 
@@ -218,8 +227,8 @@ public class Player extends JFrame implements Constants{
 					path = "sprites/marioJump.png";
 
 				if(contJump > 40){
-					this.y += (int) 20 * .5;
-					this.contJump += (int) 20 * .5;
+					this.y += (int) 20 * .2;
+					this.contJump += (int) 20 * .2;
 					if(contJump > 100){
 						this.contJump = 0;
 						this.jump = false;
@@ -309,7 +318,6 @@ public class Player extends JFrame implements Constants{
 
 	@Override
 	public Rectangle bounds() {
-		// TODO Auto-generated method stub
 		return (new Rectangle(x,y, width, 50));
 	}
 }

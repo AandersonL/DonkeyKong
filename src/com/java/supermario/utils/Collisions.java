@@ -81,7 +81,7 @@ public class Collisions implements Constants {
 			barril.y += 2;
 			barril.width -= 5;
 			barril.height -= 5;
-			if(player.intersects(barril) && !Central.player1.getJump() && !Central.player1.getEscada()){
+			if(player.intersects(barril) && !Central.player1.getJump()){
 				Central.player1.setLose(true);
 				
 				

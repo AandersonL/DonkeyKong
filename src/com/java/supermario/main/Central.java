@@ -7,10 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.Scanner;
-import org.json.*;
+//import org.json.*;
 import javax.swing.Timer;
 import javax.swing.JFrame;
 import com.java.supermario.constants.Constants;
@@ -19,17 +16,15 @@ import com.java.supermario.environment.DefaultBackground;
 import com.java.supermario.environment.LocalManager;
 import com.java.supermario.environment.Martelo;
 import com.java.supermario.environment.MenuScreen;
-import com.java.supermario.environment.Network;
+//import com.java.supermario.environment.Network;
 import com.java.supermario.environment.OnlineManager;
 import com.java.supermario.environment.Player;
-import com.java.supermario.environment.Sound;
+//import com.java.supermario.environment.Sound;
 import com.java.supermario.environment.Stage0;
 import com.java.supermario.utils.Collisions;
 
 
 public class Central extends JFrame implements Constants, ActionListener, KeyListener{
-	private static boolean isStart;
-	private boolean isMario;
 	//	private boolean isServidor;
 	public static boolean isSingle;
 	private MenuScreen settings;
@@ -56,7 +51,10 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 	};
 	public static State state;
 	public Central(){
-		Scanner scan;
+		
+	}
+	
+	public void init(){
 		this.setTitle("Donkey Kong Arcade");
 		this.setSize(1000,700);
 		this.setLocationRelativeTo(null);
@@ -66,8 +64,6 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		img = createImage(1000,700);
 		gfx = img.getGraphics();
-		isMario = false;
-		isStart = false;
 		isSingle = true;
 		player1 = new Player();
 		kong = new Boss();
@@ -80,11 +76,10 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 		localManager = new LocalManager();
 		settings = new MenuScreen();
 		this.addMouseListener(settings);
-		timer = new Timer(90, this);
+		timer = new Timer(35, this);
 		timer.start();
 		state = State.MENU;	
 	}
-
 	@Override
 	public void paint(Graphics g) {
 
@@ -158,7 +153,7 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 
 			if(e.getKeyCode() == e.VK_F && !isSingle && !kong.isDead())
 				kong.lancaBarril();
-//
+			
 //			if(e.getKeyCode() == e.VK_Q)
 //				martelo.isEnd = true;
 		}
@@ -220,11 +215,6 @@ public class Central extends JFrame implements Constants, ActionListener, KeyLis
 		if(player1.getLife()){
 			state = State.MENU;
 			Central.kong.listaBarril.clear();
-//			state = State.MENU;	
-//			player1.init();
-//			kong.reset();
-//			martelo.init();
-//			this.isSingle = true;
 		}
 
 	}

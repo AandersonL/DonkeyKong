@@ -21,16 +21,15 @@ public class Barril extends JFrame implements Constants{
 	private int num, contFall;
 	private int x,y;
 	private boolean isFinal, fall, stop;
+	private int CHANGE = 2;
 	public Barril(){
 		path = "sprites/barril1.png";
 		contBarril = 1;
 		num = 0;
 		x = 300;
 		y = 100;
-		
 		fall = false;
 		contFall = 0;
-		
 	}
 
 
@@ -56,16 +55,16 @@ public class Barril extends JFrame implements Constants{
 	public void moveBarril() {
 		num++;
 		//System.out.println("Contador queda " + contFall);
-		if(num % 2 == 0){
+		if(num % CHANGE == 0){
 			path = "sprites/barril" + contBarril + ".png";
 			if(!fall){
 				contBarril++;
-				x += 25;
+				x += 15;
 				if(contBarril > 4)
 					contBarril = 1;
 			}else if(fall){
 				contBarril--;
-				x -= 25;
+				x -= 15;
 				if(contBarril < 1)
 					contBarril = 4;
 			}
@@ -104,7 +103,6 @@ public class Barril extends JFrame implements Constants{
 
 	@Override
 	public Rectangle bounds() {
-		// TODO Auto-generated method stub
 		return (new Rectangle(x,y, 30, 30));
 	}
 	

@@ -24,9 +24,6 @@ public class DefaultBackground extends JPanel implements Constants{
 		g.setColor(Color.black);
 		g.fillRect(0, 0, WIDTH_TELA, HEIGTH_TELA);
 		
-	}
-	
-
-	
+	}	
 
 }
